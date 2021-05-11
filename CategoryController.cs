@@ -220,6 +220,35 @@ namespace NorthwindConsole
             }
         }
 
+        private static void deleteCategory()
+        {
+            logger.Info("Deleting A category and its products");
+
+            var db = new NWConsole_96_SRContext();
+            var query = db.Categories.OrderBy(p => p.CategoryId);
+
+            Console.WriteLine("Select the category which you would like to delete");
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            foreach (var item in query)
+            {
+                Console.WriteLine($"{item.CategoryId}) {item.CategoryName}");
+            }
+            Console.ForegroundColor = ConsoleColor.White;
+            int id = int.Parse(Console.ReadLine());
+            Console.Clear();
+            logger.Info($"CategoryId {id} selected");
+            //Categories category = db.Categories.FirstOrDefault(c => c.CategoryId == id);
+            Categories category = db.Categories.Include("Products").FirstOrDefault(c => c.CategoryId == id);
+            Console.WriteLine($"{category.CategoryName} - {category.Description}");
+            foreach (Products p in category.Products)
+            {
+                db.Products.Remove(p);
+            }
+            db.Categories.Remove(category);
+            db.SaveChanges();
+
+        }
+
 
         public static void manageCategoryWorkflows()
         {
@@ -237,6 +266,7 @@ namespace NorthwindConsole
                     Console.WriteLine("4) Display Category and related products");
                     Console.WriteLine("5) Display all Categories and their related products");
                     Console.WriteLine("6) Display All Categories and Active Products");
+                    Console.WriteLine("7) Delete Category");
                     Console.WriteLine("\"back\" to go to main menu");
                     choice = Console.ReadLine();
                     Console.Clear();
@@ -265,6 +295,10 @@ namespace NorthwindConsole
                     else if (choice == "6")
                     {
                         DisplayAllCategoriesAndAllActiveProducts();
+                    }
+                    else if (choice == "7")
+                    {
+                        deleteCategory();
                     }
 
                 } while (choice.ToLower() != "back");

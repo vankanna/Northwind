@@ -189,6 +189,18 @@ namespace NorthwindConsole
             }
         }
 
+        private static void deleteProduct()
+        {
+            logger.Info("Delete a single product");
+
+            var db = new NWConsole_96_SRContext();
+            Console.WriteLine("Enter Product Name To Search For And Delete");
+            string productName = Console.ReadLine();
+            Products product = db.Products.FirstOrDefault(b => b.ProductName == productName);
+            db.Products.Remove(product);
+            db.SaveChanges();
+        }
+
         public static void manageProductWorkflows()
         {
             logger.Info("Entering Category Workflow");
@@ -203,6 +215,7 @@ namespace NorthwindConsole
                     Console.WriteLine("2) Add Product");
                     Console.WriteLine("3) Get Product");
                     Console.WriteLine("4) Update Product");
+                    Console.WriteLine("5) Delete Product");
                     Console.WriteLine("\"back\" to go to main menu");
                     choice = Console.ReadLine();
                     Console.Clear();
@@ -223,6 +236,10 @@ namespace NorthwindConsole
                     else if (choice == "4")
                     {
                         updateProduct();
+                    }
+                    else if (choice == "5")
+                    {
+                        deleteProduct();
                     }
 
                 } while (choice.ToLower() != "back");
