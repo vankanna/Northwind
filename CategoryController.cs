@@ -119,7 +119,7 @@ namespace NorthwindConsole
             Console.WriteLine("Would you like to change the " + prompt + " field? y/n?");
             if (Console.ReadLine() == "y")
             {
-                Console.WriteLine("Please Enter A New Value ( Current Value: + " + currentValue + " )");
+                Console.WriteLine("Please Enter A New Value ( Current Value: " + currentValue + " )");
                 string newValue = Console.ReadLine();
                 return newValue;
             }
